@@ -3,7 +3,6 @@ console.time('init');
 const {app, Tray, BrowserWindow, ipcMain} = require('electron');
 
 const path = require('path');
-const url = require('url');
 
 const appIconDefault = path.join(__dirname, 'static', 'appIcon.png');
 
@@ -34,11 +33,7 @@ app.on('ready', () => {
     alwaysOnTop: true
   });
 
-  win.loadURL(url.format({
-    pathname: path.join(__dirname, 'index.html'),
-    protocol: 'file:',
-    slashes: true
-  }));
+  win.loadURL(`file://${__dirname}/dist/index.html`);
 
   tray.on('click', (e, bounds) => {
     let pos = calculateWinPos(bounds);
