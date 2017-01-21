@@ -1,0 +1,19 @@
+{
+  "name": "togglapp",
+  "version": "0.1.0",
+  "description": "Toggl App",
+  "main": "src/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron src/app.js"
+  },
+  "keywords": [],
+  "author": "Emiliano Prandi <emiprandi@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^1.4.15"
+  },
+  "dependencies": {
+    "electron-json-storage": "^3.0.0"
+  }
+}
