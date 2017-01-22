@@ -13,11 +13,11 @@ var indexHtml = new HtmlWebpackPlugin({
 
 module.exports = {
   entry: './app/app.js',
+  target: 'electron-renderer',
   output: {
     path: path.join(__dirname, 'dist'),
     filename: 'assets/app.js'
   },
-  target: 'electron-renderer',
   devtool: isDev ? 'inline-sourcemap' : null,
   module: {
     loaders: [
