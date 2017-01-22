@@ -12,6 +12,10 @@ var indexHtml = new HtmlWebpackPlugin({
   hash: true
 });
 
+var cssModules = new ExtractTextPlugin('css/radiola.css', {
+  allChunks: true
+});
+
 module.exports = {
   entry: './app/app.js',
   target: 'electron-renderer',
@@ -35,8 +39,9 @@ module.exports = {
       },
     ]
   },
-  plugins: isDev ? [indexHtml] : [
+  plugins: isDev ? [indexHtml, cssModules] : [
     indexHtml,
+    cssModules,
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify('production')

@@ -2,6 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {ipcRenderer} from 'electron';
 
+import Header from './components/Header';
+import Timer from './components/Timer';
+
 class App extends React.Component {
   constructor() {
     super();
@@ -23,7 +26,8 @@ class App extends React.Component {
   render() {
     return (
       <div className="appContainer">
-        <h1>Hello</h1>
+        <Header></Header>
+        <Timer></Timer>
         <button onClick={this._closeHandler}>Close</button>
       </div>
     );
