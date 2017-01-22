@@ -1,9 +1,12 @@
 import React from 'react';
+import styles from './Timer.css';
 
 const Timer = () => {
   return (
     <section>
-      0:00:00
+      <div>0:00:00</div>
+      <div className={styles.start}></div>
+      <div className={styles.stop}></div>
     </section>
   );
 }
