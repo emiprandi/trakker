@@ -1,7 +1,6 @@
 import React from 'react';
-//import styles from './Header.css';
 
-const Timer = (props) => {
+const Timer = () => {
   return (
     <section>
       0:00:00
