@@ -1,77 +1,103 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {ipcRenderer} from 'electron';
+import Api from './services/api';
 
-const db = localStorage;
+const api = new Api();
 
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
+
+const db = localStorage;
 
 class App extends React.Component {
   constructor() {
     super();
 
-    const storageState = db.getItem('state');
-    this.state = storageState ? JSON.parse(storageState) : {
-      auth: {
-        user: '',
-        pass: '',
-        token: '',
-        me: {}
-      },
-      entries: [],
-      timer: {
-        running: false,
-        title: '',
-        pid: 0
-      }
+    let state;
+    const defaultState = {
+      authToken: '',
+      authUser: '',
+      authPass: '',
+      me: {},
+      entries: []
     };
+    const storageState = db.getItem('state');
+
+    if (storageState) {
+      state = JSON.parse(storageState);
+      api.setToken(state.authToken);
+    } else {
+      state = defaultState;
+    }
+    this.state = state;
 
     // login
-    this.handlerLoginUserInput = this.handlerLoginUserInput.bind(this);
-    this.handlerLoginPassInput = this.handlerLoginPassInput.bind(this);
+    this.handlerLoginInputs = this.handlerLoginInputs.bind(this);
     this.handlerLoginAction = this.handlerLoginAction.bind(this);
   }
 
-  // login
-  handlerLoginUserInput(e) {
-    this.setState({
-      auth: Object.assign({}, this.state.auth, {
-        user: e.target.value
-      })
+  /*
+   * Helpers
+   */
+  persistState() {
+    db.setItem('state', JSON.stringify(this.state));
+  }
+
+  loadEntries() {
+    api.request('/time_entries').then((entries) => {
+      this.setState({
+        entries: entries
+      }, this.persistState);
     });
   }
 
-  handlerLoginPassInput(e) {
+  /*
+   * Login
+   */
+  handlerLoginInputs(e) {
+    const field = e.target.name;
+    const value = e.target.value;
     this.setState({
-      auth: Object.assign({}, this.state.auth, {
-        pass: e.target.value
-      })
+      [field]: value
     });
   }
 
   handlerLoginAction() {
-    console.log(this.state.auth);
+    api.login(this.state.authUser, this.state.authPass).then((response) => {
+      this.setState({
+        authToken: response.api_token,
+        authUser: '',
+        authPass: '',
+        me: response
+      }, this.persistState);
+
+      this.loadEntries();
+    });
   }
 
+  /*
+   * Dashboard
+   */
   handlerClose() {
     ipcRenderer.send('close-app');
   }
 
-  componentDidMount() {
-    if (this.state.auth.token !== '') {
-      // ajax call to start the app
-    }
-  }
 
   /*
    * Render
    */
-  render() {
-    let view = <Login onLogin={this.handlerLoginAction} onUserChange={this.handlerLoginUserInput} onPassChange={this.handlerLoginPassInput} />;
+  componentDidMount() {
+    if (this.state.authToken !== '') {
+      this.loadEntries();
+    }
+  }
 
-    if (this.state.auth.token !== '') {
-      view = <Dashboard />;
+  render() {
+    let view = <Login onLogin={this.handlerLoginAction} onChange={this.handlerLoginInputs} />;
+
+    if (this.state.authToken !== '') {
+      view = <Dashboard name={this.state.me.fullname} />;
     }
 
     return (

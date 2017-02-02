@@ -12,7 +12,7 @@ var indexHtml = new HtmlWebpackPlugin({
   hash: true
 });
 
-var cssModules = new ExtractTextPlugin('css/radiola.css', {
+var cssModules = new ExtractTextPlugin('css/app.css', {
   allChunks: true
 });
 

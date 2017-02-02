@@ -5,8 +5,8 @@ const Login = (props) => {
   return (
     <div>
       <h1>toggl</h1>
-      <input type="text" onChange={props.onUserChange} />
-      <input type="password" onChange={props.onPassChange} />
+      <input type="text" name="authUser" onChange={props.onChange} />
+      <input type="password" name="authPass" onChange={props.onChange} />
 
       <button onClick={props.onLogin}>LOG IN</button>
     </div>

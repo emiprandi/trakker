@@ -1,9 +1,13 @@
 import React from 'react';
 import styles from './Dashboard.css';
 
-const Dashboard = () => {
+const Dashboard = (props) => {
   return (
-    <h1>toggl</h1>
+    <div>
+      <h1>toggl</h1>
+      <span>Dashboard for {props.name}</span>
+    </div>
+
   );
 }
 
