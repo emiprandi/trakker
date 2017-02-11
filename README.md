@@ -1,7 +1,9 @@
 # Toggl menubar app
 
 Simple time tracking menubar app that works with Toggl.
-Made with Electron, React, Webpack, Babel, Figma and the *great* [toggl api](https://github.com/toggl/toggl_api_docs).
+Made with Electron, React, Webpack, Babel, Figma and the great [toggl api](https://github.com/toggl/toggl_api_docs).
+
+:warning: Work in progress
 
 ## Development
 
