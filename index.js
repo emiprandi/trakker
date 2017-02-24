@@ -26,7 +26,7 @@ app.on('ready', () => {
   win = new BrowserWindow({
     title: 'TogglApp',
     width: 350,
-    height: 200,
+    height: 240,
     frame: false,
     resizable: false,
     movable: false,
@@ -47,6 +47,14 @@ app.on('ready', () => {
     if (!isDev) {
       win.hide();
     }
+  });
+
+  ipcMain.on('timer-on', () => {
+    win.setSize(350, 120, true);
+  });
+
+  ipcMain.on('timer-off', () => {
+    win.setSize(350, 240, true);
   });
 
   ipcMain.once('close-app', () => {

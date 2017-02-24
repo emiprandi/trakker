@@ -25,6 +25,7 @@ class App extends React.Component {
       inputUser: '',
       inputPass: '',
       loginError: false,
+      currentTimer: {},
       entries: [],
       projects: db.getJSON('projects') || [],
       section: db.get('section') || 'login'
@@ -32,6 +33,7 @@ class App extends React.Component {
 
     this.handlerInputChange = this.handlerInputChange.bind(this);
     this.handlerLoginAction = this.handlerLoginAction.bind(this);
+    this.handlerSaveEntry = this.handlerSaveEntry.bind(this);
   }
 
   /*
@@ -47,17 +49,19 @@ class App extends React.Component {
       // get current app status: entries dashboard or active timer
       Promise.all([activeTimer, entries]).then(result => {
         const section = 'app';
-        // result[0]
+
         result[1].sort((a, b) => new Date(b.start) - new Date(a.start));
+        const entries = result[1].filter((entry) => entry.stop);
 
         db.set('section', section);
         this.setState({
+          currentTimer: result[0].data || {},
           section: section,
-          entries: result[1]
+          entries: entries
         });
       });
 
-      // updates projects
+      // updates projects (will be used later...)
       api.request('/workspaces/' + db.get('wid') + '/projects').then(projects => {
         db.setJSON('projects', projects);
         this.setState({
@@ -77,7 +81,7 @@ class App extends React.Component {
   }
 
   /*
-   * Login
+   * Handlers
    */
   handlerLoginAction() {
     api.login(this.state.inputUser, this.state.inputPass).then(response => {
@@ -98,11 +102,17 @@ class App extends React.Component {
     });
   }
 
-  /*
-   * App
-   */
-  handlerClose() {
-    ipcRenderer.send('close-app');
+  handlerSaveEntry(newEntry) {
+    let entries = this.state.entries;
+    entries.unshift(newEntry);
+
+    this.setState({
+      entries: entries
+    });
+  }
+
+  handlerRemote(action) {
+    ipcRenderer.send(action);
   }
 
   /*
@@ -119,13 +129,13 @@ class App extends React.Component {
 
     // State-of-the-art router hehe
     if (this.state.section === 'login') {
-      view = <Login onLogin={this.handlerLoginAction} onChange={this.handlerInputChange} authError={this.state.authError} />;
+      view = <Login onLogin={this.handlerLoginAction} onInputChange={this.handlerInputChange} authError={this.state.authError} />;
     } else if (this.state.section === 'loading') {
       view = <Loading />;
     } else if (this.state.section === 'app') {
       view = <div>
         <Dashboard entries={this.state.entries} projects={this.state.projects} />
-        <Timer />
+        <Timer current={this.state.currentTimer} onSave={this.handlerSaveEntry} remote={this.handlerRemote} />
       </div>;
     }
 

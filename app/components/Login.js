@@ -4,8 +4,8 @@ import styles from './Login.css';
 const Login = props =>
   <div>
     <h1>toggl</h1>
-    <input type="text" name="inputUser" onChange={props.onChange} />
-    <input type="password" name="inputPass" onChange={props.onChange} />
+    <input type="text" name="inputUser" onChange={props.onInputChange} />
+    <input type="password" name="inputPass" onChange={props.onInputChange} />
 
     <button onClick={props.onLogin}>LOG IN</button>
 

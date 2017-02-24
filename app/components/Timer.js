@@ -17,8 +17,8 @@ class Timer extends React.Component {
       project: 0
     };
 
-    this.startTimer = this.startTimer.bind(this);
-    this.stopTimer = this.stopTimer.bind(this);
+    this.handlerStartTimer = this.handlerStartTimer.bind(this);
+    this.handlerStopTimer = this.handlerStopTimer.bind(this);
   }
 
   tick() {
@@ -33,16 +33,25 @@ class Timer extends React.Component {
     });
   }
 
-  startTimer() {
+  handlerStartTimer(date) {
+    this.props.remote('timer-on');
     this.setState({
-      start: Date.now()
+      start: Date.parse(date) || Date.now()
     }, () => {
+      this.tick();
       this.timer = setInterval(() => this.tick(), 1000);
     });
   }
 
-  stopTimer() {
-    // save time entry...
+  handlerStopTimer() {
+    this.props.remote('timer-off');
+    this.props.onSave({
+      start: this.state.start,
+      stop: Date.now(),
+      description: this.state.description,
+      project: this.state.project
+    });
+
     clearInterval(this.timer);
     this.setState({
       start: null,
@@ -50,14 +59,26 @@ class Timer extends React.Component {
         seconds: '00',
         minutes: '00',
         hours: '0'
-      }
+      },
+      description: '',
+      project: 0
     });
+  }
+
+  componentDidMount() {
+    if (this.props.current.start) {
+      this.setState({
+        description: this.props.current.description,
+        project: this.props.current.pid || 0
+      });
+      this.handlerStartTimer(this.props.current.start);
+    }
   }
 
   render() {
     return <div>
       <div>{this.state.timer.hours}:{this.state.timer.minutes}:{this.state.timer.seconds}</div>
-      <button onClick={this.state.start === null ? this.startTimer : this.stopTimer}>Action</button>
+      <button onClick={this.state.start === null ? this.handlerStartTimer : this.handlerStopTimer}>Action</button>
     </div>;
   }
 }
