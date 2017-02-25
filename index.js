@@ -4,6 +4,7 @@ const {app, Tray, BrowserWindow, ipcMain} = require('electron');
 const path = require('path');
 
 const appIconDefault = path.join(__dirname, 'static', 'appIcon.png');
+const appIconActive = path.join(__dirname, 'static', 'appIconActive.png');
 const isDev = process.env.NODE_ENV !== "build";
 const appUrl = isDev ? 'http://localhost:8080' : `file://${__dirname}/dist/index.html`;
 
@@ -50,10 +51,12 @@ app.on('ready', () => {
   });
 
   ipcMain.on('timer-on', () => {
+    tray.setImage(appIconActive);
     win.setSize(300, 120, true);
   });
 
   ipcMain.on('timer-off', () => {
+    tray.setImage(appIconDefault);
     win.setSize(300, 240, true);
   });
 
