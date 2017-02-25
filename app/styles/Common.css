@@ -1,0 +1,10 @@
+.section {
+  background-size: contain;
+  height: 240px;
+  padding: 30px 50px;
+  text-align: center;
+}
+
+.logo {
+  margin-bottom: 10px;
+}

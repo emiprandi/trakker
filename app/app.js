@@ -40,33 +40,29 @@ class App extends React.Component {
    * Methods
    */
   loadDashboard() {
-    this.setState({
-      section: 'loading'
-    }, () => {
-      const activeTimer = api.request('/time_entries/current');
-      const entries = api.request('/time_entries');
+    const activeTimer = api.request('/time_entries/current');
+    const entries = api.request('/time_entries');
 
-      // get current app status: entries dashboard or active timer
-      Promise.all([activeTimer, entries]).then(result => {
-        const section = 'app';
+    // get current app status: entries dashboard or active timer
+    Promise.all([activeTimer, entries]).then(result => {
+      const section = 'app';
 
-        result[1].sort((a, b) => new Date(b.start) - new Date(a.start));
-        const entries = result[1].filter((entry) => entry.stop);
+      result[1].sort((a, b) => new Date(b.start) - new Date(a.start));
+      const entries = result[1].filter((entry) => entry.stop);
 
-        db.set('section', section);
-        this.setState({
-          currentTimer: result[0].data || {},
-          section: section,
-          entries: entries
-        });
+      db.set('section', section);
+      this.setState({
+        currentTimer: result[0].data || {},
+        section: section,
+        entries: entries
       });
+    });
 
-      // updates projects (will be used later...)
-      api.request('/workspaces/' + db.get('wid') + '/projects').then(projects => {
-        db.setJSON('projects', projects);
-        this.setState({
-          projects: projects
-        });
+    // updates projects (will be used later...)
+    api.request('/workspaces/' + db.get('wid') + '/projects').then(projects => {
+      db.setJSON('projects', projects);
+      this.setState({
+        projects: projects
       });
     });
   }
@@ -84,20 +80,25 @@ class App extends React.Component {
    * Handlers
    */
   handlerLoginAction() {
-    api.login(this.state.inputUser, this.state.inputPass).then(response => {
-      db.set('token', response.api_token);
-      db.set('wid', response.default_wid);
+    this.setState({
+      section: 'loading'
+    }, () => {
+      api.login(this.state.inputUser, this.state.inputPass).then(response => {
+        db.set('token', response.api_token);
+        db.set('wid', response.default_wid);
 
-      this.setState({
-        inputUser: '',
-        inputPass: '',
-        authError: false
-      });
+        this.setState({
+          inputUser: '',
+          inputPass: '',
+          authError: false
+        });
 
-      this.loadDashboard();
-    }).catch(() => {
-      this.setState({
-        authError: true
+        this.loadDashboard();
+      }).catch(() => {
+        this.setState({
+          authError: true,
+          section: 'login'
+        });
       });
     });
   }
@@ -120,7 +121,11 @@ class App extends React.Component {
    */
   componentDidMount() {
     if (this.state.section === 'app') {
-      this.loadDashboard();
+      this.setState({
+        section: 'loading'
+      }, () => {
+        this.loadDashboard();
+      });
     }
   }
 

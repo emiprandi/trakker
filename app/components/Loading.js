@@ -1,8 +1,15 @@
 import React from 'react';
 
+import commonStyles from '../styles/Common.css';
+import spinnerStyles from '../styles/Spinner.css';
+
+import background from '../img/login-background.png';
+import logo from '../img/toggl-logo.png';
+
 const Loading = props =>
-  <div>
-    <h1>Loading...</h1>
+  <div className={commonStyles.section} style={{backgroundImage: `url(${background})`}}>
+    <img className={commonStyles.logo} src={logo} height="30" />
+    <div className={spinnerStyles.spinner} />
   </div>;
 
 export default Loading;
