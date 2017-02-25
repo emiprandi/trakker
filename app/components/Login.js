@@ -1,15 +1,19 @@
 import React from 'react';
-import styles from './Login.css';
+import styles from '../styles/Login.css';
+
+import background from '../img/login-background.png';
+import logo from '../img/toggl-logo.png';
 
 const Login = props =>
-  <div>
-    <h1>toggl</h1>
-    <input type="text" name="inputUser" onChange={props.onInputChange} />
-    <input type="password" name="inputPass" onChange={props.onInputChange} />
+  <div className={styles.section} style={{backgroundImage: `url(${background})`}}>
+    <img className={styles.logo} src={logo} height="30" />
 
-    <button onClick={props.onLogin}>LOG IN</button>
+    <p className={styles.error}>{props.authError ? 'Invalid credentials' : ''}</p>
 
-    <p>{props.authError ? 'Login error' : ''}</p>
+    <input className={styles.input} type="text" name="inputUser" onChange={props.onInputChange} />
+    <input className={styles.input} type="password" name="inputPass" onChange={props.onInputChange} />
+
+    <button className={styles.button} onClick={props.onLogin}>LOG IN</button>
   </div>;
 
 export default Login;

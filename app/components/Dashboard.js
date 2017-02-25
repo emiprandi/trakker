@@ -1,5 +1,4 @@
 import React from 'react';
-import styles from './Dashboard.css';
 
 const Dashboard = props =>
   <ul>

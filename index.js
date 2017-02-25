@@ -12,7 +12,7 @@ let win;
 
 const calculateWinPos = (bounds) => {
   return {
-    x: (bounds.x + (bounds.width / 2)) - 175,
+    x: (bounds.x + (bounds.width / 2)) - 150,
     y: bounds.y
   };
 };
@@ -25,7 +25,7 @@ app.on('ready', () => {
 
   win = new BrowserWindow({
     title: 'TogglApp',
-    width: 350,
+    width: 300,
     height: 240,
     frame: false,
     resizable: false,
@@ -50,11 +50,11 @@ app.on('ready', () => {
   });
 
   ipcMain.on('timer-on', () => {
-    win.setSize(350, 120, true);
+    win.setSize(300, 120, true);
   });
 
   ipcMain.on('timer-off', () => {
-    win.setSize(350, 240, true);
+    win.setSize(300, 240, true);
   });
 
   ipcMain.once('close-app', () => {

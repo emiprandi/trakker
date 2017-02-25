@@ -1,0 +1,49 @@
+.section {
+  background-size: contain;
+  height: 240px;
+  padding: 30px 50px;
+  text-align: center;
+}
+
+.logo {
+  margin-bottom: 10px;
+}
+
+.error {
+  color: #E51428;
+  font-family: 'Lato', sans-serif;
+  font-size: 14px;
+  line-height: 15px;
+  margin-bottom: 10px;
+}
+
+.input {
+  background-color: rgba(255,255,255,0.7);
+  border: 0;
+  border-radius: 5px;
+  color: #444;
+  font-family: 'Lato', sans-serif;
+  font-size: 16px;
+  height: 30px;
+  line-height: 30px;
+  margin-bottom: 13px;
+  outline: none;
+  padding: 0 10px;
+  text-align: center;
+  width: 180px;
+}
+
+.button {
+  background-color: #E51428;
+  border: 0;
+  border-radius: 5px;
+  color: #FFF;
+  font-family: 'Lato', sans-serif;
+  height: 25px;
+  line-height: 25px;
+  outline: none;
+  padding: 0 22px;
+}
+.button:active {
+  background-color: #ce1123;
+}
