@@ -22,14 +22,10 @@ class Timer extends React.Component {
   }
 
   tick() {
-    const elapsed = Time.elapsed(this.state.start);
+    const time = new Time(this.state.start);
 
     this.setState({
-      timer: {
-        seconds: elapsed.seconds,
-        minutes: elapsed.minutes,
-        hours: elapsed.hours
-      }
+      timer: time.elapsed()
     });
   }
 

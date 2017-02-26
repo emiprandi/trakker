@@ -9,7 +9,7 @@ const db = new DB();
 
 import Login from './components/Login';
 import Loading from './components/Loading';
-import Dashboard from './components/Dashboard';
+import Entries from './components/Entries';
 import Timer from './components/Timer';
 
 class App extends React.Component {
@@ -39,11 +39,11 @@ class App extends React.Component {
   /*
    * Methods
    */
-  loadDashboard() {
+  loadEntries() {
     const activeTimer = api.request('/time_entries/current');
     const entries = api.request('/time_entries');
 
-    // get current app status: entries dashboard or active timer
+    // get current app status: entries and active timer
     Promise.all([activeTimer, entries]).then(result => {
       const section = 'app';
 
@@ -93,7 +93,7 @@ class App extends React.Component {
           authError: false
         });
 
-        this.loadDashboard();
+        this.loadEntries();
       }).catch(() => {
         this.setState({
           authError: true,
@@ -124,7 +124,7 @@ class App extends React.Component {
       this.setState({
         section: 'loading'
       }, () => {
-        this.loadDashboard();
+        this.loadEntries();
       });
     }
   }
@@ -139,7 +139,7 @@ class App extends React.Component {
       view = <Loading />;
     } else if (this.state.section === 'app') {
       view = <div>
-        <Dashboard entries={this.state.entries} projects={this.state.projects} />
+        <Entries entries={this.state.entries} projects={this.state.projects} />
         <Timer current={this.state.currentTimer} onSave={this.handlerSaveEntry} remote={this.handlerRemote} />
       </div>;
     }

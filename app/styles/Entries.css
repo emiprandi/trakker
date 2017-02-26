@@ -1,0 +1,45 @@
+.entries {
+  background-color: #FFF;
+}
+.entries li {
+  display: flex;
+  flex-direction: row;
+  font-family: 'Lato', sans-serif;
+  height: 60px;
+  padding: 10px 18px;
+}
+.entries li i.projectColor {
+  background-color: #EEE;
+  border-radius: 50%;
+  height: 10px;
+  margin: 25px 12px 0 0;
+  width: 10px;
+}
+.entries li div {
+  display: flex;
+  flex-direction: column;
+}
+.entries li div.entryDescription {
+  width: 157px;
+}
+.entries li div.entryTime {
+  text-align: right;
+  width: 85px;
+}
+.entries li div span {
+  color: #555;
+  font-size: 16px;
+  line-height: 24px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.entries li div.entryTime span {
+  color: #888;
+}
+.entries li div span:first-child {
+  color: #CCC;
+  font-size: 10px;
+  line-height: 16px;
+  text-transform: uppercase;
+}
