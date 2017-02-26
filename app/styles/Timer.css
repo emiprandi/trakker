@@ -1,0 +1,85 @@
+.timer {
+  bottom: -60px;
+  font-family: 'Lato', sans-serif;
+  position: fixed;
+  transition: all 0.3s;
+  width: 100%;
+}
+.timer .clock {
+  display: flex;
+  flex-direction: row;
+  height: 60px;
+  justify-content: space-between;
+  padding: 10px 18px;
+}
+.timer .clock .elapsed {
+  font-size: 32px;
+  line-height: 40px;
+}
+.timer .clock .action {
+  background: transparent;
+  border: 0;
+  font-size: 18px;
+  letter-spacing: -1px;
+  outline: none;
+}
+
+.timer .task {
+  background-color: #FFF;
+  display: flex;
+  flex-direction: row;
+  height: 60px;
+  padding: 10px 18px;
+}
+.timer .task i.projectColor {
+  background-color: #EEE;
+  border-radius: 50%;
+  height: 10px;
+  margin: 25px 12px 0 0;
+  width: 10px;
+}
+.timer .task div {
+  display: flex;
+  flex-direction: column;
+}
+.timer .task div span {
+  color: #CCC;
+  font-size: 10px;
+  line-height: 16px;
+  text-transform: uppercase;
+}
+.timer .task div input {
+  border: 0;
+  color: #555;
+  font-size: 16px;
+  line-height: 24px;
+  outline: none;
+  width: 242px;
+}
+
+.timer.timerDefault .clock {
+  background-color: #EEE;
+  color: #DDD;
+}
+.timer.timerDefault .clock .action {
+  color: #888;
+}
+.timer.timerDefault .clock .action:active {
+  color: #BBB;
+}
+.timer.timerActive {
+  bottom: 0;
+}
+.timer.timerActive .clock {
+  background-color: #E20505;
+  color: #F18282;
+}
+.timer.timerActive .clock .elapsed .highlighted {
+  color: #FFF;
+}
+.timer.timerActive .clock .action {
+  color: #F9CDCD;
+}
+.timer.timerActive .clock .action:active {
+  color: #F18282;
+}

@@ -2,9 +2,8 @@ import React from 'react';
 import Time from '../services/time';
 
 import entriesStyles from '../styles/Entries.css';
-//import timerStyles from '../styles/Timer.css';
 
-const Dashboard = props =>
+const Entries = props =>
   <ul className={entriesStyles.entries}>
     {props.entries.map((entry) =>
       <li key={entry.id}>
@@ -21,4 +20,4 @@ const Dashboard = props =>
     )}
   </ul>;
 
-export default Dashboard;
+export default Entries;

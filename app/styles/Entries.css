@@ -1,5 +1,6 @@
 .entries {
   background-color: #FFF;
+  margin-bottom: 60px;
 }
 .entries li {
   display: flex;

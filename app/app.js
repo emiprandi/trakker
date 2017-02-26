@@ -132,7 +132,7 @@ class App extends React.Component {
   render() {
     let view;
 
-    // State-of-the-art router hehe
+    // State-of-the-art router 😂
     if (this.state.section === 'login') {
       view = <Login onLogin={this.handlerLoginAction} onInputChange={this.handlerInputChange} authError={this.state.authError} />;
     } else if (this.state.section === 'loading') {

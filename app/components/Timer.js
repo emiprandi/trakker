@@ -1,6 +1,8 @@
 import React from 'react';
 import Time from '../services/time';
 
+import timerStyles from '../styles/Timer.css';
+
 class Timer extends React.Component {
   constructor(props) {
     super(props);
@@ -19,6 +21,7 @@ class Timer extends React.Component {
 
     this.handlerStartTimer = this.handlerStartTimer.bind(this);
     this.handlerStopTimer = this.handlerStopTimer.bind(this);
+    this.handlerInputChange = this.handlerInputChange.bind(this);
   }
 
   tick() {
@@ -61,6 +64,12 @@ class Timer extends React.Component {
     });
   }
 
+  handlerInputChange(e) {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  }
+
   componentDidMount() {
     if (this.props.current.start) {
       this.setState({
@@ -72,9 +81,39 @@ class Timer extends React.Component {
   }
 
   render() {
-    return <div>
-      <div>{this.state.timer.hours}:{this.state.timer.minutes}:{this.state.timer.seconds}</div>
-      <button onClick={this.state.start === null ? this.handlerStartTimer : this.handlerStopTimer}>Action</button>
+    let stopped = this.state.start === null;
+
+    return <div className={timerStyles.timer + ' ' + (stopped ? timerStyles.timerDefault : timerStyles.timerActive)}>
+      <div className={timerStyles.clock}>
+        <div className={timerStyles.elapsed}>
+          <span
+            className={this.state.timer.hours !== '0' ? timerStyles.highlighted : null}
+          >{this.state.timer.hours}</span>
+          :
+          <span
+            className={
+              (this.state.timer.hours !== '0' || this.state.timer.minutes !== '00') ? timerStyles.highlighted : null
+            }
+          >{this.state.timer.minutes}</span>
+          :
+          <span
+            className={
+              (this.state.timer.hours !== '0' || this.state.timer.minutes !== '00' ||
+                this.state.timer.seconds !== '00') ? timerStyles.highlighted : null
+            }
+          >{this.state.timer.seconds}</span>
+        </div>
+        <button className={timerStyles.action} onClick={stopped ? this.handlerStartTimer : this.handlerStopTimer}>
+          {stopped ? 'START' : 'STOP'}
+        </button>
+      </div>
+      <div className={timerStyles.task}>
+        <i className={timerStyles.projectColor}></i>
+        <div className={timerStyles.entryDescription}>
+          <span>Task</span>
+          <input type="text" name="description" placeholder="What are you working on?" onChange={this.handlerInputChange} />
+        </div>
+      </div>
     </div>;
   }
 }
