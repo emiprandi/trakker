@@ -5,11 +5,13 @@ import entriesStyles from '../styles/Entries.css';
 
 const Entries = props =>
   <ul className={entriesStyles.entries}>
-    {props.entries.map((entry) =>
+    {props.entries.length === 0 ? (
+      <li>No entries to show.</li>
+    ) : props.entries.map(entry =>
       <li key={entry.id}>
-        <i className={entriesStyles.projectColor}></i>
+        <i className={entriesStyles.projectColor} style={{backgroundColor: entry.projectColor}}></i>
         <div className={entriesStyles.entryDescription}>
-          <span>Project</span>
+          <span>{entry.projectName || 'Unknown Project'}</span>
           <span>{entry.description}</span>
         </div>
         <div className={entriesStyles.entryTime}>

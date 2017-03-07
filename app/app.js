@@ -27,7 +27,7 @@ class App extends React.Component {
       loginError: false,
       currentTimer: {},
       entries: [],
-      projects: db.getJSON('projects') || [],
+      projects: [],
       section: db.get('section') || 'login'
     };
 
@@ -42,27 +42,43 @@ class App extends React.Component {
   loadEntries() {
     const activeTimer = api.request('/time_entries/current');
     const entries = api.request('/time_entries');
+    const projects = api.request('/workspaces/' + db.get('wid') + '/projects');
 
     // get current app status: entries and active timer
-    Promise.all([activeTimer, entries]).then(result => {
+    Promise.all([activeTimer, entries, projects]).then(result => {
       const section = 'app';
 
+      // sort new ones on top
       result[1].sort((a, b) => new Date(b.start) - new Date(a.start));
-      const entries = result[1].filter((entry) => entry.stop);
+
+      // hydrate entries with project info and filter unfinished ones
+      let cleanEntries = [];
+      result[1].forEach(entry => {
+        if (!entry.stop) {
+          return;
+        }
+
+        let matchedProject = {};
+        if (entry.pid) {
+          matchedProject = result[2].filter(project => entry.pid === project.id)[0];
+        } else {
+          matchedProject.name = 'Unknown Project';
+          matchedProject.hex_color = '';
+        }
+
+        // no need to hydrate with whole project data
+        entry.projectName = matchedProject.name;
+        entry.projectColor = matchedProject.hex_color;
+
+        cleanEntries.push(entry);
+      });
 
       db.set('section', section);
       this.setState({
         currentTimer: result[0].data || {},
         section: section,
-        entries: entries
-      });
-    });
-
-    // updates projects (will be used later...)
-    api.request('/workspaces/' + db.get('wid') + '/projects').then(projects => {
-      db.setJSON('projects', projects);
-      this.setState({
-        projects: projects
+        entries: cleanEntries,
+        projects: result[2]
       });
     });
   }
@@ -139,7 +155,7 @@ class App extends React.Component {
       view = <Loading />;
     } else if (this.state.section === 'app') {
       view = <div>
-        <Entries entries={this.state.entries} projects={this.state.projects} />
+        <Entries entries={this.state.entries} />
         <Timer current={this.state.currentTimer} onSave={this.handlerSaveEntry} remote={this.handlerRemote} />
       </div>;
     }

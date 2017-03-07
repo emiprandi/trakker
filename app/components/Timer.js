@@ -45,6 +45,7 @@ class Timer extends React.Component {
   handlerStopTimer() {
     this.props.remote('timer-off');
     this.props.onSave({
+      id: 0,
       start: this.state.start,
       stop: Date.now(),
       description: this.state.description,
@@ -111,7 +112,13 @@ class Timer extends React.Component {
         <i className={timerStyles.projectColor}></i>
         <div className={timerStyles.entryDescription}>
           <span>Task</span>
-          <input type="text" name="description" placeholder="What are you working on?" onChange={this.handlerInputChange} />
+          <input
+            type="text"
+            name="description"
+            placeholder="What are you working on?"
+            onChange={this.handlerInputChange}
+            value={this.state.description}
+          />
         </div>
       </div>
     </div>;
