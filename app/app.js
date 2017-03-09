@@ -123,6 +123,15 @@ class App extends React.Component {
     let entries = this.state.entries;
     entries.unshift(newEntry);
 
+    newEntry.wid = parseInt(db.get('wid'));
+
+    api.request('/time_entries', {
+      method: 'POST',
+      body: JSON.stringify({
+        time_entry: newEntry
+      })
+    });
+
     this.setState({
       entries: entries
     });

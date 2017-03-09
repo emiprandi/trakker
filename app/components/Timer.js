@@ -31,7 +31,7 @@ class Timer extends React.Component {
     });
   }
 
-  handlerStartTimer(date) {
+  startTimer(date) {
     this.props.remote('timer-on');
 
     const started = date ? Date.parse(date) : Date.now();
@@ -45,19 +45,18 @@ class Timer extends React.Component {
     });
   }
 
+  handlerStartTimer() {
+    this.startTimer();
+  }
+
   handlerStopTimer() {
     this.props.remote('timer-off');
 
-    const now = Date.now();
-    const duration = new Time(this.state.start, now);
-
     this.props.onSave({
       id: 0,
-      start: this.state.start,
-      stop: now,
-      duration: duration,
+      start: new Date(this.state.start).toISOString(),
+      duration: this.timer.elapsed().milliseconds,
       description: this.state.description,
-      pid: this.state.project,
       created_with: 'github.com/emiprandi/toggl'
     });
 
@@ -86,7 +85,7 @@ class Timer extends React.Component {
         description: this.props.current.description,
         project: this.props.current.pid || 0
       });
-      this.handlerStartTimer(this.props.current.start);
+      this.startTimer(this.props.current.start);
     }
   }
 
