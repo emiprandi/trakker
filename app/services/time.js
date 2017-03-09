@@ -1,35 +1,35 @@
-const Time = class {
+export default class Time {
   constructor(start, end) {
     this.start = typeof start !== 'number' ? Date.parse(start) : start;
     this.end = end ? (typeof end !== 'number' ? Date.parse(end) : end) : null;
     this.millisecondsDiff = end ? (this.end - this.start) : null;
   }
 
-  getMillisecondDiff() {
+  getMilliseconds() {
     return this.millisecondsDiff || (Date.now() - this.start);
   }
 
   getSeconds() {
-    return Math.floor(this.getMillisecondDiff() % 60000 / 1000);
+    return Math.floor(this.getMilliseconds() % 60000 / 1000);
   }
 
   getMinutes() {
-    return Math.floor(this.getMillisecondDiff() % 36e5 / 60000);
+    return Math.floor(this.getMilliseconds() % 36e5 / 60000);
   }
 
   getHours() {
-    return Math.floor(this.getMillisecondDiff() / 36e5);
+    return Math.floor(this.getMilliseconds() / 36e5);
   }
 
   elapsed() {
     const seconds = this.getSeconds();
     const minutes = this.getMinutes();
-    const hours = this.getHours();
 
     return {
+      milliseconds: this.getMilliseconds(),
       seconds: (seconds < 10 ? '0' : '') + seconds,
       minutes: (minutes < 10 ? '0' : '') + minutes,
-      hours: hours.toString()
+      hours: this.getHours().toString()
     };
   }
 
@@ -53,5 +53,3 @@ const Time = class {
     return result.length === 1 ? parseInt(elapsed.seconds) + suffix : result.join(':') + suffix;
   }
 }
-
-export default Time
