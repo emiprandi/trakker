@@ -1,19 +1,30 @@
 const Time = class {
-  constructor(start, end = Date.now()) {
+  constructor(start, end) {
     this.start = typeof start !== 'number' ? Date.parse(start) : start;
-    this.end = typeof end !== 'number' ? Date.parse(end) : end;
+    this.end = end ? (typeof end !== 'number' ? Date.parse(end) : end) : null;
+    this.millisecondsDiff = end ? (this.end - this.start) : null;
+  }
+
+  getMillisecondDiff() {
+    return this.millisecondsDiff || (Date.now() - this.start);
+  }
+
+  getSeconds() {
+    return Math.floor(this.getMillisecondDiff() % 60000 / 1000);
+  }
+
+  getMinutes() {
+    return Math.floor(this.getMillisecondDiff() % 36e5 / 60000);
+  }
+
+  getHours() {
+    return Math.floor(this.getMillisecondDiff() / 36e5);
   }
 
   elapsed() {
-    let elapsed = (this.end - this.start) / 1000;
-
-    const seconds = Math.round(elapsed % 60);
-
-    elapsed = Math.floor(elapsed / 60);
-    const minutes = Math.round(elapsed % 60);
-
-    elapsed = Math.floor(elapsed / 60);
-    const hours = Math.round(elapsed % 24);
+    const seconds = this.getSeconds();
+    const minutes = this.getMinutes();
+    const hours = this.getHours();
 
     return {
       seconds: (seconds < 10 ? '0' : '') + seconds,

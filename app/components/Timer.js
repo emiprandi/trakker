@@ -8,6 +8,7 @@ class Timer extends React.Component {
     super(props);
 
     this.timer;
+    this.timerInterval;
     this.state = {
       start: null,
       timer: {
@@ -25,34 +26,42 @@ class Timer extends React.Component {
   }
 
   tick() {
-    const time = new Time(this.state.start);
-
     this.setState({
-      timer: time.elapsed()
+      timer: this.timer.elapsed()
     });
   }
 
   handlerStartTimer(date) {
     this.props.remote('timer-on');
+
+    const started = date ? Date.parse(date) : Date.now();
+    this.timer = new Time(started);
+
     this.setState({
-      start: Date.parse(date) || Date.now()
+      start: started
     }, () => {
       this.tick();
-      this.timer = setInterval(() => this.tick(), 1000);
+      this.timerInterval = setInterval(() => this.tick(), 1000);
     });
   }
 
   handlerStopTimer() {
     this.props.remote('timer-off');
+
+    const now = Date.now();
+    const duration = new Time(this.state.start, now);
+
     this.props.onSave({
       id: 0,
       start: this.state.start,
-      stop: Date.now(),
+      stop: now,
+      duration: duration,
       description: this.state.description,
-      project: this.state.project
+      pid: this.state.project,
+      created_with: 'github.com/emiprandi/toggl'
     });
 
-    clearInterval(this.timer);
+    clearInterval(this.timerInterval);
     this.setState({
       start: null,
       timer: {
