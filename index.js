@@ -22,10 +22,10 @@ app.on('ready', () => {
   app.dock.hide();
 
   tray = new Tray(appIconDefault);
-  tray.setToolTip('TogglApp');
+  tray.setToolTip('Trakker');
 
   win = new BrowserWindow({
-    title: 'TogglApp',
+    title: 'Trakker',
     width: 300,
     height: 240,
     frame: false,

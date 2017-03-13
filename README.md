@@ -1,6 +1,6 @@
-# Toggl menubar app
+# Trakker app
 
-Simple time tracking menubar app that works with Toggl.
+Trakker is a simple time tracking menubar app that works with Toggl.
 Made with Electron, React, Webpack, Babel, Figma and [toggl api](https://github.com/toggl/toggl_api_docs).
 
 ## Development

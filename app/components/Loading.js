@@ -4,11 +4,11 @@ import commonStyles from '../styles/Common.css';
 import spinnerStyles from '../styles/Spinner.css';
 
 import background from '../img/login-background.png';
-import logo from '../img/toggl-logo.png';
+import logo from '../img/trakker-logo.png';
 
 const Loading = props =>
   <div className={commonStyles.section} style={{backgroundImage: `url(${background})`}}>
-    <img className={commonStyles.logo} src={logo} height="30" />
+    <img className={commonStyles.logo} src={logo} />
     <div className={spinnerStyles.spinner} />
   </div>;
 
