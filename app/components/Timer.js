@@ -1,4 +1,6 @@
 import React from 'react';
+import {ipcRenderer} from 'electron';
+import Api from './services/api';
 import Time from '../services/time';
 
 import timerStyles from '../styles/Timer.css';
@@ -32,7 +34,7 @@ class Timer extends React.Component {
   }
 
   startTimer(date) {
-    this.props.remote('timer-on');
+    this.handlerRemote('timer-on');
 
     const started = date ? Date.parse(date) : Date.now();
     this.timer = new Time(started);
@@ -50,7 +52,7 @@ class Timer extends React.Component {
   }
 
   handlerStopTimer() {
-    this.props.remote('timer-off');
+    this.handlerRemote('timer-off');
 
     this.props.onSave({
       id: 0,
@@ -77,6 +79,10 @@ class Timer extends React.Component {
     this.setState({
       [e.target.name]: e.target.value
     });
+  }
+
+  handlerRemote(action) {
+    ipcRenderer.send(action);
   }
 
   componentDidMount() {

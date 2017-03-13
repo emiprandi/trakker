@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {ipcRenderer} from 'electron';
 import Api from './services/api';
 import DB from './services/db';
 
@@ -137,10 +136,6 @@ class App extends React.Component {
     });
   }
 
-  handlerRemote(action) {
-    ipcRenderer.send(action);
-  }
-
   /*
    * Render
    */
@@ -165,7 +160,7 @@ class App extends React.Component {
     } else if (this.state.section === 'app') {
       view = <div>
         <Entries entries={this.state.entries} />
-        <Timer current={this.state.currentTimer} onSave={this.handlerSaveEntry} remote={this.handlerRemote} />
+        <Timer current={this.state.currentTimer} onSave={this.handlerSaveEntry} />
       </div>;
     }
 
