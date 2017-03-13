@@ -122,15 +122,6 @@ class App extends React.Component {
     let entries = this.state.entries;
     entries.unshift(newEntry);
 
-    newEntry.wid = parseInt(db.get('wid'));
-
-    api.request('/time_entries', {
-      method: 'POST',
-      body: JSON.stringify({
-        time_entry: newEntry
-      })
-    });
-
     this.setState({
       entries: entries
     });
@@ -160,7 +151,7 @@ class App extends React.Component {
     } else if (this.state.section === 'app') {
       view = <div>
         <Entries entries={this.state.entries} />
-        <Timer current={this.state.currentTimer} onSave={this.handlerSaveEntry} />
+        <Timer current={this.state.currentTimer} onSave={this.handlerSaveEntry} api={api} wid={db.get('wid')} />
       </div>;
     }
 

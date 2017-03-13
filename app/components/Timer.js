@@ -1,6 +1,5 @@
 import React from 'react';
 import {ipcRenderer} from 'electron';
-import Api from './services/api';
 import Time from '../services/time';
 
 import timerStyles from '../styles/Timer.css';
@@ -11,20 +10,22 @@ class Timer extends React.Component {
 
     this.timer;
     this.timerInterval;
+    this.debounceTimer;
     this.state = {
-      start: null,
+      id: this.props.current.start ? this.props.current.id : 0,
+      start: this.props.current.start || null,
       timer: {
         seconds: '00',
         minutes: '00',
         hours: '0'
       },
-      description: '',
-      project: 0
+      description: this.props.current.start ? this.props.current.description : '',
+      project: this.props.current.start ? this.props.current.pid : 0
     };
 
     this.handlerStartTimer = this.handlerStartTimer.bind(this);
     this.handlerStopTimer = this.handlerStopTimer.bind(this);
-    this.handlerInputChange = this.handlerInputChange.bind(this);
+    this.handlerDescriptionChange = this.handlerDescriptionChange.bind(this);
   }
 
   tick() {
@@ -36,7 +37,7 @@ class Timer extends React.Component {
   startTimer(date) {
     this.handlerRemote('timer-on');
 
-    const started = date ? Date.parse(date) : Date.now();
+    const started = Date.parse(date);
     this.timer = new Time(started);
 
     this.setState({
@@ -48,36 +49,66 @@ class Timer extends React.Component {
   }
 
   handlerStartTimer() {
-    this.startTimer();
+    this.props.api.request('/time_entries/start', {
+      method: 'POST',
+      body: JSON.stringify({
+        time_entry: {
+          wid: parseInt(this.props.wid),
+          created_with: 'github.com/emiprandi/toggl'
+        }
+      })
+    }).then(response => {
+      this.startTimer(response.data.start);
+      this.setState({
+        id: response.data.id
+      });
+    });
   }
 
   handlerStopTimer() {
-    this.handlerRemote('timer-off');
+    this.props.api.request(`/time_entries/${this.state.id}/stop`, {
+      method: 'PUT'
+    }).then(response => {
+      this.handlerRemote('timer-off');
 
-    this.props.onSave({
-      id: 0,
-      start: new Date(this.state.start).toISOString(),
-      duration: this.timer.elapsed().milliseconds,
-      description: this.state.description,
-      created_with: 'github.com/emiprandi/toggl'
-    });
+      this.props.onSave(response.data);
 
-    clearInterval(this.timerInterval);
-    this.setState({
-      start: null,
-      timer: {
-        seconds: '00',
-        minutes: '00',
-        hours: '0'
-      },
-      description: '',
-      project: 0
+      clearInterval(this.timerInterval);
+      this.setState({
+        id: 0,
+        start: null,
+        timer: {
+          seconds: '00',
+          minutes: '00',
+          hours: '0'
+        },
+        description: '',
+        project: 0
+      });
     });
   }
 
-  handlerInputChange(e) {
+  debounce(callback) {
+    if (this.debounceTimer) {
+      clearTimeout(this.debounceTimer);
+    }
+    this.debounceTimer = setTimeout(callback, 250);
+  }
+
+  handlerDescriptionChange(e) {
     this.setState({
-      [e.target.name]: e.target.value
+      description: e.target.value
+    }, () => {
+      this.debounce(() => {
+        this.props.api.request(`/time_entries/${this.state.id}`, {
+          method: 'PUT',
+          body: JSON.stringify({
+            time_entry: {
+              description: this.state.description
+            }
+          })
+        });
+      });
     });
   }
 
@@ -87,10 +118,6 @@ class Timer extends React.Component {
 
   componentDidMount() {
     if (this.props.current.start) {
-      this.setState({
-        description: this.props.current.description,
-        project: this.props.current.pid || 0
-      });
       this.startTimer(this.props.current.start);
     }
   }
@@ -130,7 +157,7 @@ class Timer extends React.Component {
             type="text"
             name="description"
             placeholder="What are you working on?"
-            onChange={this.handlerInputChange}
+            onChange={this.handlerDescriptionChange}
             value={this.state.description}
           />
         </div>
