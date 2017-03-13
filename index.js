@@ -31,7 +31,7 @@ app.on('ready', () => {
     frame: false,
     resizable: false,
     movable: false,
-    show: isDev ? true : false,
+    show: false,
     alwaysOnTop: true
   });
 
@@ -45,9 +45,7 @@ app.on('ready', () => {
   });
 
   win.on('blur', () => {
-    if (!isDev) {
-      win.hide();
-    }
+    win.hide();
   });
 
   ipcMain.on('timer-on', () => {
