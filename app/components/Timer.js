@@ -54,7 +54,7 @@ class Timer extends React.Component {
       body: JSON.stringify({
         time_entry: {
           wid: parseInt(this.props.wid),
-          created_with: 'github.com/emiprandi/toggl'
+          created_with: 'github.com/emiprandi/trakker'
         }
       })
     }).then(response => {
