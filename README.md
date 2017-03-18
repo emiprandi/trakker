@@ -9,11 +9,6 @@ Made with Electron, React, Webpack, Babel, Figma and [toggl api](https://github.
 * Run `npm install` and then in two separate terminal windows:
 * `npm start` and `npm run electron`
 
-## TODO
-
-This is a first iteration (aka proof of concept) of the app and although it is very useful to quickly track time there is a lot of room for improvements. E.g. change/add task project, check if timer is stopped from webapp, etc.
-I'm currently working on darwin `.app` package to be ready for distribution.
-
 ## Screenshots
 
 <img src="./docs/app1.png">
@@ -24,3 +19,8 @@ I'm currently working on darwin `.app` package to be ready for distribution.
 Login | Dashboard | Tracking
 --- | --- | ---
 <img src="./docs/login.png" width="300"> | <img src="./docs/dashboard.png" width="300"> | <img src="./docs/tracking.png" width="300">
+
+## TODO
+
+This is a first iteration (aka proof of concept) of the app and although it is very useful to quickly track time there is a lot of room for improvements. E.g. change/add task project, check if timer is stopped from webapp, etc.
+I'm currently working on darwin `.app` package to be ready for distribution.
