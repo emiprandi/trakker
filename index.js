@@ -3,8 +3,9 @@ console.time('init');
 const {app, Tray, BrowserWindow, ipcMain} = require('electron');
 const path = require('path');
 
-const appIconDefault = path.join(__dirname, 'static', 'appIcon.png');
+const appIconDefault = path.join(__dirname, 'static', 'appIconTemplate.png');
 const appIconActive = path.join(__dirname, 'static', 'appIconActive.png');
+
 const isDev = process.env.NODE_ENV !== "build";
 const appUrl = isDev ? 'http://localhost:8080' : `file://${__dirname}/dist/index.html`;
 
@@ -32,7 +33,10 @@ app.on('ready', () => {
     resizable: false,
     movable: false,
     show: false,
-    alwaysOnTop: true
+    alwaysOnTop: true,
+    webPreferences: {
+      preload: path.join(__dirname, 'processPreload.js')
+    }
   });
 
   win.loadURL(appUrl);
