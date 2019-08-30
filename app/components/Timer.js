@@ -1,5 +1,4 @@
 import React from 'react';
-import {ipcRenderer} from 'electron';
 import Time from '../services/time';
 
 import timerStyles from '../styles/Timer.css';
@@ -113,7 +112,10 @@ class Timer extends React.Component {
   }
 
   handlerRemote(action) {
-    ipcRenderer.send(action);
+    // is Electron?
+    if (typeof window !== 'undefined' && typeof window.process === 'object' && window.process.type === 'renderer') {
+      window.ipcRenderer.send(action);
+    }
   }
 
   componentDidMount() {
